@@ -153,7 +153,8 @@ function setChapterActive(chId) {
   const stepperId = chId.startsWith('ch7') ? 'ch7' : chId;
   setStepperActive(stepper, stepperId);
   // the chapter's accent color drives its panels, flow boxes and chips
-  section.style.setProperty('--accent', STAGES[chId]?.color || '#94A3B8');
+  const sectionEl = document.getElementById(chId);
+  if (sectionEl) sectionEl.style.setProperty('--accent', STAGES[chId]?.color || '#94A3B8');
 }
 
 sections.forEach(({ ch, section, panels }) => {
@@ -193,6 +194,13 @@ scene.setProgress(0);
 
 setChapterActive(CHAPTERS[0].id);
 
+// testability hook (also lets power users poke the journey from the console)
+window.__viz = {
+  get progress() { return journeyProxy.p; },
+  get packetY() { return scene.getPacketY(); },
+  setProgress: (p) => scene.setProgress(p),
+};
+
 /* ------------------------------------------------------- replay journey */
 const replayBtn = document.getElementById('replay');
 replayBtn.addEventListener('click', () => {
@@ -202,11 +210,17 @@ replayBtn.addEventListener('click', () => {
   const tl = gsap.timeline({
     onComplete: () => { replayBtn.disabled = false; },
   });
+  const maxScroll = () => document.body.scrollHeight - window.innerHeight;
   CHAPTERS.forEach((ch, i) => {
     const target = i / (CHAPTERS.length - 1);
     tl.to(proxy, {
       p: target, duration: perChapter, ease: 'none',
-      onUpdate: () => scene.setProgress(proxy.p),
+      onUpdate: () => {
+        scene.setProgress(proxy.p);
+        // the page rides along: panels animate, and there is no position
+        // jump when the replay hands control back to the scroll
+        window.scrollTo(0, maxScroll() * proxy.p);
+      },
     }, i * perChapter);
     tl.add(() => {
       setChapterActive(ch.id);

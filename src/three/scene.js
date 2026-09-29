@@ -188,6 +188,8 @@ export function initScene(canvas, { reducedMotion = false } = {}) {
     focusChapter,
     setProgress,
     pulseStage,
+    getPacketY: () => packet.position.y,
+    getProgress: () => progress,
     set onStageClick(cb) { onStageClick = cb; },
     dispose() { renderer.dispose(); },
   };
