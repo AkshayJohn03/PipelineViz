@@ -10,7 +10,7 @@
   --danger: #F87171;
   --ok: #4ADE80;
   --hairline: rgba(139, 150, 171, 0.28);
-  --panel-w: min(560px, 94vw);
+  --panel-w: min(470px, 90vw);
   --mono: 'JetBrains Mono', ui-monospace, monospace;
   --sans: 'Inter', system-ui, sans-serif;
 }
@@ -73,8 +73,8 @@ section.chapter { position: relative; --accent: #94A3B8; }
   padding: 12vh 0 14vh;
   pointer-events: none;
 }
-.side-left  .rail { left: 4vw; }
-.side-right .rail { right: 4vw; }
+.side-left  .rail { left: 2.5vw; }
+.side-right .rail { right: 2.5vw; }
 
 .panel {
   pointer-events: auto;
@@ -169,8 +169,8 @@ ol.flow-steps li.flow-step:last-child::after { content: '✓'; color: var(--ok);
   font-family: var(--mono); font-size: 0.7rem; color: var(--accent);
   letter-spacing: 0.18em; text-transform: uppercase;
 }
-.panel h2 { font-size: 1.25rem; margin: 0.35rem 0 0.75rem; line-height: 1.25; }
-.panel p { margin: 0.6rem 0; color: var(--ink); font-size: 0.95rem; }
+.panel h2 { font-size: 1.08rem; margin: 0.3rem 0 0.6rem; line-height: 1.25; }
+.panel p { margin: 0.5rem 0; color: var(--ink); font-size: 0.88rem; }
 .panel ul { margin: 0.6rem 0; padding-left: 1.1rem; font-size: 0.92rem; }
 .panel li { margin: 0.3rem 0; }
 .panel blockquote {
@@ -184,7 +184,7 @@ ol.flow-steps li.flow-step:last-child::after { content: '✓'; color: var(--ok);
 
 .numbers { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; padding-top: 0.9rem; border-top: 1px solid var(--hairline); }
 .numbers div { min-width: 90px; }
-.numbers .v { font-family: var(--mono); font-size: 1.25rem; font-weight: 600; color: var(--accent); }
+.numbers .v { font-family: var(--mono); font-size: 1.05rem; font-weight: 600; color: var(--accent); }
 .numbers .k { font-size: 0.68rem; color: var(--muted); display: block; max-width: 150px; }
 
 .hint {

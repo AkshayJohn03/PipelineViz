@@ -37,7 +37,7 @@ function makeLabelSprite(text, color) {
   const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
     map: tex, transparent: true, depthTest: false,
   }));
-  sprite.scale.set(2.4, 2.4 * (112 / 512) * (512 / 112) * 0.42, 1); // ≈ 2.4 x 0.53
+  sprite.scale.set(1.55, 1.55 * (112 / 512), 1); // compact: ≈ 1.55 x 0.34
   return sprite;
 }
 
@@ -50,14 +50,14 @@ export function buildStage(iconKey) {
   g.add(holder);
 
   const icon = new THREE.Mesh(
-    new THREE.PlaneGeometry(1.55, 1.55),
+    new THREE.PlaneGeometry(1.15, 1.15),
     new THREE.MeshBasicMaterial({
       map: null, transparent: true, depthWrite: false,
       toneMapped: false,
     }),
   );
   const halo = new THREE.Mesh(
-    new THREE.CircleGeometry(1.25, 48),
+    new THREE.CircleGeometry(0.98, 48),
     new THREE.MeshBasicMaterial({
       color: colorObj, transparent: true, opacity: 0.1,
       side: THREE.DoubleSide, depthWrite: false,
@@ -65,14 +65,15 @@ export function buildStage(iconKey) {
   );
   halo.position.z = -0.05;
   const ring = new THREE.Mesh(
-    new THREE.TorusGeometry(1.18, 0.022, 10, 64),
+    new THREE.TorusGeometry(0.92, 0.02, 10, 64),
     new THREE.MeshBasicMaterial({ color: colorObj, transparent: true, opacity: 0.5 }),
   );
-  const light = new THREE.PointLight(colorObj, 6, 4.5);
+  const light = new THREE.PointLight(colorObj, 5, 3.8);
   holder.add(icon, halo, ring, light);
 
   const label = makeLabelSprite(`${numFor(iconKey)} · ${nameFor(iconKey)}`, color);
-  label.position.set(0, 1.62, 0);
+  const side = (iconKey.length % 2 === 0) ? 1 : -1; // keep labels off the panel side
+  label.position.set(side * 1.55, 0.15, 0);
   g.add(label);
 
   let disposed = false;
@@ -87,16 +88,17 @@ export function buildStage(iconKey) {
     color,
     animate(t) {
       holder.rotation.y = Math.sin(t * 0.3 + iconKey.length) * 0.28;
-      icon.position.y = Math.sin(t * 0.7) * 0.06;
+      icon.position.y = Math.sin(t * 0.7) * 0.05;
       ring.rotation.z = t * 0.08;
-      label.material.opacity = 0.82 + Math.sin(t * 1.2) * 0.12;
+      label.material.opacity = 0.8 + Math.sin(t * 1.2) * 0.1;
+      label.position.y = 0.15 + Math.sin(t * 0.9) * 0.03;
     },
     setActive(active) {
-      icon.material.opacity = active ? 1 : 0.42;
-      halo.material.opacity = active ? 0.2 : 0.06;
-      ring.material.opacity = active ? 0.85 : 0.22;
-      light.intensity = active ? 9 : 2.5;
-      label.material.opacity = active ? 1 : 0.45;
+      icon.material.opacity = active ? 1 : 0.5;
+      halo.material.opacity = active ? 0.18 : 0.07;
+      ring.material.opacity = active ? 0.85 : 0.25;
+      light.intensity = active ? 7 : 2.2;
+      label.material.opacity = active ? 1 : 0.5;
     },
     dispose() { disposed = true; },
   };
