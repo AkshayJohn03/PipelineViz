@@ -9,6 +9,7 @@ import { META, CHAPTERS, FOOTER } from './data/journey.js';
 import { TERMS } from './data/terms.js';
 import { initScene } from './three/scene.js';
 import { FLOWS, STEPPER } from './data/flows.js';
+import { STAGES } from './data/palette.js';
 import { renderChapterFlow, buildStepper, setStepperActive } from './workflow.js';
 
 import './styles.css';
@@ -65,12 +66,21 @@ CHAPTERS.forEach((ch) => {
 });
 
 // persistent bottom stepper — where am I in the whole workflow?
+const stepperColors = {
+  ch1: STAGES.ch1.color, ch2: STAGES.ch2.color, ch3: STAGES.ch3.color,
+  ch4: STAGES.ch4.color, ch5: STAGES.ch5.color, ch6: STAGES.ch6.color,
+  ch7: STAGES.ch7.color, ch8: STAGES.ch8.color,
+};
 const stepper = buildStepper(STEPPER, (chapterId) => {
   const target = document.getElementById(chapterId)
     || document.getElementById(chapterId === 'ch7' ? 'ch7a' : chapterId);
   if (target) target.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
 });
 document.body.appendChild(stepper);
+stepper.querySelectorAll('li').forEach((li) => {
+  const c = stepperColors[li.dataset.chapter];
+  if (c) li.style.setProperty('--st-color', c);
+});
 
 const footer = document.getElementById('colophon');
 footer.innerHTML = `
@@ -142,6 +152,8 @@ function setChapterActive(chId) {
   progressTag.textContent = `ch ${ch.num} · ${(ch.kicker || ch.title).replace(/^CH \d+ · /, '')}`;
   const stepperId = chId.startsWith('ch7') ? 'ch7' : chId;
   setStepperActive(stepper, stepperId);
+  // the chapter's accent color drives its panels, flow boxes and chips
+  section.style.setProperty('--accent', STAGES[chId]?.color || '#94A3B8');
 }
 
 sections.forEach(({ ch, section, panels }) => {
