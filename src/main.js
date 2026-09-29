@@ -157,10 +157,6 @@ function setChapterActive(chId) {
 }
 
 sections.forEach(({ ch, section, panels }) => {
-  if (reducedMotion) {
-    panels.forEach((p) => p.classList.add('in'));
-    return;
-  }
   panels.forEach((p) => {
     if (p.classList.contains('in')) return;
     ScrollTrigger.create({
@@ -179,24 +175,27 @@ sections.forEach(({ ch, section, panels }) => {
   });
 });
 
-// global scroll progress → packet position along the pipeline path
-if (!reducedMotion) {
-  ScrollTrigger.create({
-    trigger: document.body,
+// global scroll progress → packet position, as an explicit GSAP scrub so the
+// 3D journey IS the GSAP animation (smoothed 0.4s behind the scroll)
+const journeyProxy = { p: 0 };
+gsap.to(journeyProxy, {
+  p: 1,
+  ease: 'none',
+  scrollTrigger: {
+    trigger: '#story',
     start: 'top top',
     end: 'bottom bottom',
-    onUpdate: (self) => scene.setProgress(self.progress),
-  });
-} else {
-  scene.setProgress(0.5);
-}
+    scrub: 0.4,
+  },
+  onUpdate: () => scene.setProgress(journeyProxy.p),
+});
+scene.setProgress(0);
 
 setChapterActive(CHAPTERS[0].id);
 
 /* ------------------------------------------------------- replay journey */
 const replayBtn = document.getElementById('replay');
 replayBtn.addEventListener('click', () => {
-  if (reducedMotion) return;
   replayBtn.disabled = true;
   const proxy = { p: 0 };
   const perChapter = 0.75;
@@ -215,6 +214,7 @@ replayBtn.addEventListener('click', () => {
     }, i * perChapter + perChapter * 0.5);
   });
   tl.to({}, { duration: 0.4 }); // breath before handing control back to scroll
+  tl.add(() => ScrollTrigger.refresh());
 });
 
 ScrollTrigger.refresh();
