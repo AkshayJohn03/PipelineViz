@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PipelineViz — One request, nine systems</title>
+  <meta name="description" content="A scroll-driven 3D tour of a production AI platform: follow one real question through the gateway, retrieval, forensics, evaluation and red team." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/styles.css" />
+</head>
+<body>
+  <canvas id="stage" aria-label="3D pipeline visualization"></canvas>
+  <div id="vignette" aria-hidden="true"></div>
+
+  <header id="topbar">
+    <span class="brand">Pipeline<span>Viz</span></span>
+    <span class="tag" id="progress-tag">ch 00 · the map</span>
+    <button id="replay" type="button" title="Animate the whole journey without scrolling">▶ replay the journey</button>
+  </header>
+
+  <main id="story"></main>
+
+  <!-- glossary tooltip -->
+  <div id="tooltip" role="tooltip" aria-hidden="true"><p></p></div>
+
+  <!-- click-a-stage-object facts card -->
+  <aside id="facts" aria-hidden="true" aria-label="Stage facts">
+    <header><span class="k"></span><button id="facts-close" aria-label="Close">×</button></header>
+    <ul class="fl"></ul>
+  </aside>
+
+  <footer id="colophon"></footer>
+
+  <noscript>
+    <div style="position:fixed;inset:0;background:#050B18;color:#F2F6FC;display:grid;place-items:center;padding:2rem;text-align:center;font-family:sans-serif">
+      PipelineViz needs JavaScript — it is a 3D scroll experience. The full story also lives in plain text in the README and TUTOR_BRIEF.
+    </div>
+  </noscript>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
